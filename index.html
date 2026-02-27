@@ -1,455 +1,623 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Magdalena Bronowska</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant:ital,wght@0,700;1,700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:         #0c0d18;
-    --bg2:        #111320;
-    --bg3:        #161828;
-    --bg4:        #1c1f30;
-    --rose:       #d4907a;
-    --rose-dim:   #b07060;
-    --rose-faint: rgba(212,144,122,0.08);
-    --plum:       #b08acc;
-    --plum-dim:   #8a68aa;
-    --plum-faint: rgba(176,138,204,0.08);
-    --gold:       #c9a96e;
-    --text:       #e2ddef;
-    --text-mid:   #a099c0;
-    --text-dim:   #625c88;
-    --border:     rgba(176,138,204,0.18);
-    --border-md:  rgba(212,144,122,0.3);
-  }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+/* ══════════════════════════════════════
+   THEME TOKENS
+══════════════════════════════════════ */
+:root {
+  --rose:        #c97b65;
+  --rose-hover:  #b56a55;
+  --plum:        #9b78bb;
+  --gold:        #b8935a;
+  --transition:  background 0.35s, color 0.35s, border-color 0.35s;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-size: 18px;
-    line-height: 1.75;
-    overflow-x: hidden;
-  }
+[data-theme="dark"] {
+  --bg:          #0f1017;
+  --bg2:         #14161f;
+  --bg3:         #191c28;
+  --bg4:         #1f2233;
+  --text:        #e8e4f0;
+  --text-mid:    #9991b8;
+  --text-dim:    #585278;
+  --border:      rgba(155,120,187,0.16);
+  --border-md:   rgba(201,123,101,0.28);
+  --nav-bg:      rgba(15,16,23,0.94);
+  --shadow:      0 4px 24px rgba(0,0,0,0.4);
+  --header-glow: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(155,120,187,0.14) 0%, transparent 65%),
+                 radial-gradient(ellipse 35% 35% at 85% 85%, rgba(201,123,101,0.08) 0%, transparent 65%);
+}
 
-  /* vignette */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(ellipse at center, transparent 55%, rgba(8,8,18,0.6) 100%);
-    pointer-events: none;
-    z-index: 0;
-  }
+[data-theme="light"] {
+  --bg:          #faf8f5;
+  --bg2:         #f3f0eb;
+  --bg3:         #edeae4;
+  --bg4:         #e5e1d9;
+  --text:        #0e0b1a;
+  --text-mid:    #3a3355;
+  --text-dim:    #6a6090;
+  --border:      rgba(80,60,120,0.18);
+  --border-md:   rgba(160,70,50,0.3);
+  --nav-bg:      rgba(250,248,245,0.94);
+  --shadow:      0 4px 24px rgba(0,0,0,0.08);
+  --header-glow: radial-gradient(ellipse 70% 60% at 50% 0%, rgba(155,120,187,0.09) 0%, transparent 65%),
+                 radial-gradient(ellipse 35% 35% at 85% 85%, rgba(201,123,101,0.06) 0%, transparent 65%);
+}
 
-  /* ── HEADER ── */
-  header {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 100px 40px 80px;
-    border-bottom: 1px solid var(--border);
-    overflow: hidden;
-  }
+/* ══════════════════════════════════════
+   BASE
+══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  header::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 70% 70% at 50% -10%, rgba(176,138,204,0.13) 0%, transparent 70%),
-      radial-gradient(ellipse 40% 40% at 80% 90%, rgba(212,144,122,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  overflow-x: hidden;
+  transition: var(--transition);
+}
 
-  .pre-name {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 11px;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-    color: var(--plum);
-    margin-bottom: 20px;
-    opacity: 0.85;
-  }
+/* ══════════════════════════════════════
+   TOP BAR (theme + language)
+══════════════════════════════════════ */
+.top-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  transition: var(--transition);
+}
 
-  h1 {
-    font-family: 'Cormorant', serif;
-    font-style: italic;
-    font-weight: 700;
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    line-height: 1;
-    letter-spacing: 0.02em;
-    color: var(--text);
-    position: relative;
-    display: inline-block;
-  }
+/* Language flags */
+.lang-btn {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  line-height: 0;
+  opacity: 0.5;
+  transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
+  display: flex;
+  align-items: center;
+}
 
-  h1 .first { color: var(--rose); }
+.lang-btn svg {
+  border-radius: 2px;
+  display: block;
+}
 
-  .tagline {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-weight: 300;
-    font-size: clamp(1rem, 2.5vw, 1.25rem);
-    color: var(--text-mid);
-    margin-top: 20px;
-    letter-spacing: 0.04em;
-  }
+.lang-btn:hover,
+.lang-btn.active {
+  opacity: 1;
+  border-color: var(--border-md);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
 
-  .divider-ornament {
-    display: block;
-    margin: 24px auto 0;
-    color: var(--gold);
-    font-size: 18px;
-    letter-spacing: 14px;
-    opacity: 0.55;
-  }
+.lang-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border);
+  margin: 0 4px;
+}
 
-  /* ── NAV ── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(12,13,24,0.93);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    justify-content: center;
-  }
+/* Theme toggle */
+.theme-toggle {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-mid);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  margin-left: 4px;
+}
 
-  nav a {
-    font-family: 'Jost', sans-serif;
-    font-weight: 400;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    text-decoration: none;
-    padding: 18px 32px;
-    transition: color 0.25s;
-    position: relative;
-  }
+.theme-toggle:hover {
+  border-color: var(--border-md);
+  color: var(--text);
+}
 
-  nav a::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 50%; right: 50%;
-    height: 1px;
-    background: var(--rose);
-    transition: left 0.25s, right 0.25s;
-  }
+.theme-icon { font-size: 14px; }
 
-  nav a:hover { color: var(--text); }
-  nav a:hover::after { left: 20%; right: 20%; }
+/* ══════════════════════════════════════
+   HEADER
+══════════════════════════════════════ */
+header {
+  position: relative;
+  text-align: center;
+  padding: 88px 40px 72px;
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+  transition: var(--transition);
+}
 
-  /* ── MAIN ── */
-  main {
-    position: relative;
-    z-index: 1;
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 0 32px 100px;
-  }
+header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--header-glow);
+  pointer-events: none;
+}
 
-  /* ── SECTIONS ── */
-  section {
-    padding: 72px 0;
-    border-bottom: 1px solid var(--border);
-  }
+.pre-name {
+  font-family: 'DM Mono', monospace;
+  font-weight: 1500;
+  font-size: 15px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--plum);
+  margin-bottom: 18px;
+  opacity: 0.8;
+}
 
-  .section-eyebrow {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 10px;
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 10px;
-    opacity: 0.75;
-  }
+h1 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(2.8rem, 7.5vw, 6rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
 
-  h2 {
-    font-family: 'Cormorant', serif;
-    font-style: italic;
-    font-weight: 700;
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    color: var(--text);
-    line-height: 1.1;
-    margin-bottom: 36px;
-  }
+h1 .first { color: var(--rose); }
 
-  h2 em { color: var(--rose); font-style: italic; }
+.tagline {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  font-size: clamp(0.85rem, 2vw, 1.05rem);
+  color: var(--text-mid);
+  margin-top: 18px;
+  letter-spacing: 0.06em;
+}
 
-  /* ── BIO ── */
-  .bio-inner {
-    display: grid;
-    grid-template-columns: 3px 1fr;
-    gap: 0 28px;
-  }
+.divider-ornament {
+  display: block;
+  margin: 22px auto 0;
+  color: var(--gold);
+  font-size: 16px;
+  letter-spacing: 16px;
+  opacity: 0.45;
+}
 
-  .bio-rule {
-    background: linear-gradient(to bottom, var(--rose), var(--plum));
-    border-radius: 2px;
-  }
+/* ══════════════════════════════════════
+   NAV
+══════════════════════════════════════ */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--nav-bg);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: center;
+  transition: var(--transition);
+}
 
-  .bio-text p {
-    font-size: 18px;
-    color: var(--text);
-    font-weight: 300;
-    line-height: 1.85;
-  }
+nav a {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 1400;
+  font-size: 15px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 18px 28px;
+  transition: color 0.2s;
+  position: relative;
+}
 
-  .bio-text p + p { margin-top: 16px; }
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 50%; right: 50%;
+  height: 2px;
+  background: var(--rose);
+  border-radius: 1px;
+  transition: left 0.25s, right 0.25s;
+}
 
-  /* ── SOCIAL LINKS ── */
-  .links-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
-    gap: 16px;
-  }
+nav a:hover { color: var(--text); }
+nav a:hover::after { left: 16%; right: 16%; }
 
-  .link-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 28px 24px 22px;
-    text-decoration: none;
-    color: var(--text);
-    transition: border-color 0.25s, transform 0.2s, background 0.25s;
-    position: relative;
-    overflow: hidden;
-  }
+/* ══════════════════════════════════════
+   MAIN
+══════════════════════════════════════ */
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 32px 100px;
+}
 
-  .link-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--rose), var(--plum));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s;
-  }
+/* ══════════════════════════════════════
+   SECTIONS
+══════════════════════════════════════ */
+section {
+  padding: 68px 0;
+  border-bottom: 1px solid var(--border);
+}
 
-  .link-card:hover {
-    border-color: var(--border-md);
-    background: var(--bg4);
-    transform: translateY(-3px);
-  }
+.section-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 8px;
+  opacity: 0.7;
+}
 
-  .link-card:hover::before { transform: scaleX(1); }
+h2 {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 32px;
+  letter-spacing: -0.01em;
+}
 
-  .link-platform {
-    font-family: 'Jost', sans-serif;
-    font-weight: 500;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--plum);
-    margin-bottom: 8px;
-    display: block;
-  }
+h2 em { color: var(--rose); font-style: italic; }
 
-  .link-handle {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 17px;
-    color: var(--text-mid);
-    display: block;
-    margin-bottom: 16px;
-  }
+/* ══════════════════════════════════════
+   BIO
+══════════════════════════════════════ */
+.bio-inner {
+  display: grid;
+  grid-template-columns: 3px 1fr;
+  gap: 0 28px;
+}
 
-  .link-cta {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--rose);
-    text-transform: uppercase;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: gap 0.2s;
-  }
+.bio-rule {
+  background: linear-gradient(to bottom, var(--rose), var(--plum));
+  border-radius: 2px;
+}
 
-  .link-card:hover .link-cta { gap: 14px; }
+.bio-text p {
+  font-size: 16px;
+  color: var(--text);
+  font-weight: 300;
+  line-height: 1.85;
+}
 
-  /* ── BLOG ── */
-  .blog-list { display: flex; flex-direction: column; }
+.bio-text p + p { margin-top: 14px; }
 
-  .blog-post {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    gap: 24px;
-    padding: 22px 0;
-    border-bottom: 1px solid var(--border);
-    text-decoration: none;
-    color: var(--text);
-    transition: padding-left 0.25s;
-  }
+.bio-text a {
+  color: var(--rose);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(201,123,101,0.35);
+  transition: border-color 0.2s;
+}
+.bio-text a:hover { border-color: var(--rose); }
 
-  .blog-post:first-child { border-top: 1px solid var(--border); }
-  .blog-post:hover { padding-left: 12px; }
+/* ══════════════════════════════════════
+   SOCIAL LINKS
+══════════════════════════════════════ */
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+  gap: 14px;
+}
 
-  .post-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 19px;
-    font-weight: 400;
-    color: var(--text);
-    transition: color 0.2s;
-    line-height: 1.4;
-  }
+.link-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 24px 22px 20px;
+  text-decoration: none;
+  color: var(--text);
+  border-radius: 10px;
+  transition: border-color 0.25s, transform 0.2s, background 0.25s, box-shadow 0.25s;
+  position: relative;
+  overflow: hidden;
+}
 
-  .blog-post:hover .post-title { color: var(--rose); }
+.link-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--rose), var(--plum));
+  border-radius: 10px 10px 0 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s;
+}
 
-  .post-tag {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--plum);
-    border: 1px solid rgba(176,138,204,0.3);
-    padding: 4px 12px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
+.link-card:hover {
+  border-color: var(--border-md);
+  background: var(--bg4);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
 
-  .blog-all-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 28px;
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-    text-decoration: none;
-    transition: color 0.2s, gap 0.2s;
-  }
+.link-card:hover::before { transform: scaleX(1); }
 
-  .blog-all-link:hover { color: var(--rose); gap: 16px; }
+.link-platform {
+  font-family: 'DM Mono', monospace;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--plum);
+  margin-bottom: 6px;
+  display: block;
+}
 
-  /* ── HOBBIES ── */
-  .hobby-intro {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 19px;
-    font-weight: 300;
-    color: var(--text-mid);
-    margin-bottom: 40px;
-    line-height: 1.7;
-  }
+.link-handle {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--text-mid);
+  display: block;
+  margin-bottom: 16px;
+}
 
-  .hobbies-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
-  }
+.link-cta {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  color: var(--rose);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.2s;
+}
 
-  .hobby-card {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 32px 20px 28px;
-    text-align: center;
-    transition: border-color 0.25s, transform 0.2s;
-  }
+.link-card:hover .link-cta { gap: 12px; }
 
-  .hobby-card:hover {
-    border-color: rgba(212,144,122,0.35);
-    transform: translateY(-3px);
-  }
+/* ══════════════════════════════════════
+   BLOG
+══════════════════════════════════════ */
+.blog-list { display: flex; flex-direction: column; }
 
-  .hobby-emoji { font-size: 32px; display: block; margin-bottom: 14px; }
+.blog-post {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: padding-left 0.25s;
+}
 
-  .hobby-name {
-    font-family: 'Jost', sans-serif;
-    font-weight: 400;
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--rose);
-    display: block;
-    margin-bottom: 8px;
-  }
+.blog-post:first-child { border-top: 1px solid var(--border); }
+.blog-post:hover { padding-left: 10px; }
 
-  .hobby-desc {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 15px;
-    color: var(--text-mid);
-    line-height: 1.55;
-    font-style: italic;
-  }
+.post-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: var(--text);
+  transition: color 0.2s;
+  line-height: 1.45;
+}
 
-  /* ── FOOTER ── */
-  footer {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    padding: 48px 24px;
-    border-top: 1px solid var(--border);
-  }
+.blog-post:hover .post-title { color: var(--rose); }
 
-  .footer-name {
-    font-family: 'Cormorant', serif;
-    font-style: italic;
-    font-size: 1.4rem;
-    color: var(--text-mid);
-    display: block;
-    margin-bottom: 8px;
-  }
+.post-tag {
+  font-family: 'DM Mono', monospace;
+  font-weight: 300;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--plum);
+  border: 1px solid rgba(155,120,187,0.3);
+  padding: 3px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
 
-  .footer-sub {
-    font-family: 'Jost', sans-serif;
-    font-weight: 300;
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--text-dim);
-  }
+.blog-all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-decoration: none;
+  transition: color 0.2s, gap 0.2s;
+}
 
-  .footer-sub span { color: var(--gold); }
+.blog-all-link:hover { color: var(--rose); gap: 14px; }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    header { padding: 64px 24px 56px; }
-    nav a { padding: 14px 18px; font-size: 10px; letter-spacing: 0.2em; }
-    main { padding: 0 20px 64px; }
-    section { padding: 52px 0; }
-    .links-grid { grid-template-columns: 1fr 1fr; }
-    .hobbies-grid { grid-template-columns: 1fr 1fr; }
-    .blog-post { grid-template-columns: 1fr; gap: 8px; }
-  }
+/* ══════════════════════════════════════
+   HOBBIES
+══════════════════════════════════════ */
+.hobby-intro {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--text-mid);
+  margin-bottom: 36px;
+  line-height: 1.65;
+}
+
+.hobbies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
+  gap: 14px;
+}
+
+.hobby-card {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 28px 18px 24px;
+  text-align: center;
+  border-radius: 10px;
+  transition: border-color 0.25s, transform 0.2s, box-shadow 0.25s;
+}
+
+.hobby-card:hover {
+  border-color: var(--border-md);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+.hobby-emoji { font-size: 30px; display: block; margin-bottom: 12px; }
+
+.hobby-name {
+  font-family: 'DM Mono', monospace;
+  font-weight: 400;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rose);
+  display: block;
+  margin-bottom: 7px;
+}
+
+.hobby-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text-mid);
+  line-height: 1.55;
+}
+
+/* ══════════════════════════════════════
+   FOOTER
+══════════════════════════════════════ */
+footer {
+  text-align: center;
+  padding: 44px 24px;
+  border-top: 1px solid var(--border);
+  transition: var(--transition);
+}
+
+.footer-name {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: 1.6rem;
+  color: var(--text-mid);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.footer-sub {
+  font-family: 'DM Mono', monospace;
+  font-weight: 1400;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 14px;
+}
+
+.footer-sub span { color: var(--gold); }
+
+.footer-flags {
+  font-size: 22px;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+.footer-flag-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  vertical-align: middle;
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════ */
+@media (max-width: 600px) {
+  .top-bar { padding: 10px 16px; }
+  header { padding: 60px 20px 52px; }
+  nav a { padding: 14px 16px; font-size: 10px; }
+  main { padding: 0 18px 64px; }
+  section { padding: 48px 0; }
+  .links-grid { grid-template-columns: 1fr 1fr; }
+  .hobbies-grid { grid-template-columns: 1fr 1fr; }
+  .blog-post { grid-template-columns: 1fr; gap: 6px; }
+}
 </style>
 </head>
 <body>
 
+<!-- TOP BAR -->
+<div class="top-bar">
+  <button class="lang-btn active" id="btn-en" onclick="setLang('en')" title="English" aria-label="Switch to English">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="28" height="14">
+      <clipPath id="a"><path d="M0 0v30h60V0z"/></clipPath>
+      <clipPath id="b"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath>
+      <g clip-path="url(#a)">
+        <path d="M0 0v30h60V0z" fill="#012169"/>
+        <path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/>
+        <path d="M0 0l60 30m0-30L0 30" clip-path="url(#b)" stroke="#C8102E" stroke-width="4"/>
+        <path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/>
+        <path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/>
+      </g>
+    </svg>
+  </button>
+  <button class="lang-btn" id="btn-pl" onclick="setLang('pl')" title="Polski" aria-label="Switch to Polish">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="28" height="14">
+      <rect width="60" height="15" fill="#fff"/>
+      <rect y="15" width="60" height="15" fill="#DC143C"/>
+    </svg>
+  </button>
+  <div class="lang-divider"></div>
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+    <span class="theme-icon" id="theme-icon">🌙</span>
+    <span id="theme-label">Dark</span>
+  </button>
+</div>
+
 <!-- HEADER -->
 <header>
-  <p class="pre-name">Welcome to my corner of the internet. Data, creativity & everything in between.</p>
+  <p class="pre-name" data-en="Welcome to my corner of the internet · Data, creativity & everything in between" data-pl="Witaj w moim zakątku internetu · Dane, kreatywność i wszystko pomiędzy">Welcome to my corner of the internet · Data, creativity & everything in between</p>
   <h1><span class="first">Magdalena</span> Bronowska</h1>
-  <p class="tagline">Data Enthusiast · Builder of Things · Digital Creator</p>
+  <p class="tagline" data-en="Data Enthusiast · Builder of Things · Digital Creator" data-pl="Entuzjastka danych · Twórca · Digital Creator">Data Enthusiast · Builder of Things · Digital Creator</p>
   <span class="divider-ornament">· · ·</span>
 </header>
 
 <!-- NAV -->
 <nav>
-  <a href="#about">About</a>
-  <a href="#links">Links</a>
-  <a href="#blog">Writing</a>
-  <a href="#hobbies">Hobbies</a>
+  <a href="#about" data-en="About" data-pl="O mnie">About</a>
+  <a href="#links" data-en="Links" data-pl="Linki">Links</a>
+  <a href="#blog" data-en="Writing" data-pl="Artykuły">Writing</a>
+  <a href="#hobbies" data-en="Hobbies" data-pl="Hobby">Hobbies</a>
 </nav>
 
 <!-- MAIN -->
@@ -457,32 +625,41 @@
 
   <!-- ABOUT -->
   <section id="about">
-    <p class="section-eyebrow">01 — Who I am</p>
-    <h2>A little bit about <em>me</em></h2>
+    <p class="section-eyebrow" data-en="01 — Who I am" data-pl="01 — Kim jestem">01 — Who I am</p>
+    <h2 data-en="A little bit about <em>me</em>" data-pl="Trochę <em>o mnie</em>">A little bit about <em>me</em></h2>
     <div class="bio-inner">
       <div class="bio-rule"></div>
-      <div class="bio-text">
-        <p>Hi! I'm Magda - a data & Power BI enthusiast based in United Kingdom, passionate about data and reporting.</p>
-        <p>You'll find my tutorials and articles over at bronowski.it/categories/#magda, my projects on GitHub, and my videos on the PowerDataHub YouTube channel. I love the community side of data as much as the technical side.</p>
-		 <p>Beyond my own projects, I'm co-leader the <a href="https://sotondatacloud.org" target="_blank" rel="noopener" style="color:var(--rose); text-decoration:none; border-bottom: 1px solid rgba(212,144,122,0.4);">Southampton Data Platform and Cloud User Group</a>, where I handle marketing, speaker selection, and sponsor communications. I also volunteer as a helper at SQL Bits, one of the UK's biggest data conferences.</p>
-        <p>And when I finally close the laptop — there's LEGO to build, yarn to crochet, places to explore, and something delicious to bake. Life is better with a good mix of all of the above.</p>
+      <div class="bio-text" id="bio-text">
+        <!-- EN bio -->
+        <div class="bio-en">10:32 27/02/2026
+          <p>Hi! I'm Magda — a data enthusiast based in the United Kingdom, passionate about data and reporting.</p>
+          <p>You'll find my articles over at <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener">bronowski.it</a>, my projects on <a href="https://github.com/MGACHA" target="_blank" rel="noopener">GitHub</a>, and my videos on the <a href="https://www.youtube.com/@PowerDataHub" target="_blank" rel="noopener">PowerDataHub YouTube channel</a>. I love the community side of data as much as the technical side.</p>
+          <p>Beyond my own projects, I co-lead the <a href="https://sotondatacloud.org" target="_blank" rel="noopener">Southampton Data Platform and Cloud User Group</a>, where I handle marketing, speaker selection, and sponsor communications. I also volunteer as a helper at SQL Bits, one of the UK's biggest data conferences.</p>
+          <p>And when I finally close the laptop — there's LEGO to build, yarn to crochet, places to explore, and something delicious to bake. Life is better with a good mix of all of the above.</p>
+        </div>
+        <!-- PL bio -->
+        <div class="bio-pl" style="display:none">
+          <p>Cześć! Jestem Magda — entuzjastka danych mieszkająca w Wielkiej Brytanii, pasjonująca się danymi i raportowaniem.</p>
+          <p>Moje artykuły znajdziesz na <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener">bronowski.it</a>, projekty na <a href="https://github.com/MGACHA" target="_blank" rel="noopener">GitHub</a>, a filmy na kanale <a href="https://www.youtube.com/@PowerDataHub" target="_blank" rel="noopener">PowerDataHub YouTube</a>. Uwielbiam społecznościowy aspekt danych tak samo jak techniczny.</p>
+          <p>Poza własnymi projektami, jestem współliderką <a href="https://sotondatacloud.org" target="_blank" rel="noopener">Southampton Data Platform and Cloud User Group</a>, gdzie zajmuję się marketingiem, doborem prelegentów i kontaktami ze sponsorami. Wolontariacko pomagam też na konferencji SQL Bits, jednej z największych konferencji o danych w Wielkiej Brytanii.</p>
+          <p>A gdy zamykam laptopa — buduję LEGO, szydełkuję, planuję kolejną podróż albo coś pysznego gotuję. Życie jest lepsze z dobrą mieszanką wszystkiego.</p>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- SOCIAL LINKS --->
+  <!-- SOCIAL LINKS -->
   <section id="links">
-    <p class="section-eyebrow">02 — Find me</p>
-    <h2>Around the <em>web</em></h2>
+    <p class="section-eyebrow" data-en="02 — Find me" data-pl="02 — Znajdź mnie">02 — Find me</p>
+    <h2 data-en="Around the <em>web</em>" data-pl="W <em>sieci</em>">Around the <em>web</em></h2>
     <div class="links-grid">
-	
 
       <a href="https://www.linkedin.com/in/magdalena-bronowska/" target="_blank" rel="noopener" class="link-card">
         <div>
           <span class="link-platform">LinkedIn</span>
           <span class="link-handle">magdalena-bronowska</span>
         </div>
-        <span class="link-cta">Connect →</span>
+        <span class="link-cta" data-en="Connect →" data-pl="Połącz się →">Connect →</span>
       </a>
 
       <a href="https://github.com/MGACHA" target="_blank" rel="noopener" class="link-card">
@@ -490,7 +667,7 @@
           <span class="link-platform">GitHub</span>
           <span class="link-handle">MGACHA</span>
         </div>
-        <span class="link-cta">View code →</span>
+        <span class="link-cta" data-en="View code →" data-pl="Zobacz kod →">View code →</span>
       </a>
 
       <a href="https://www.youtube.com/@PowerDataHub" target="_blank" rel="noopener" class="link-card">
@@ -498,7 +675,7 @@
           <span class="link-platform">YouTube</span>
           <span class="link-handle">@PowerDataHub</span>
         </div>
-        <span class="link-cta">Watch →</span>
+        <span class="link-cta" data-en="Watch →" data-pl="Oglądaj →">Watch →</span>
       </a>
 
       <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener" class="link-card">
@@ -506,7 +683,7 @@
           <span class="link-platform">Blog</span>
           <span class="link-handle">bronowski.it</span>
         </div>
-        <span class="link-cta">Read →</span>
+        <span class="link-cta" data-en="Read →" data-pl="Czytaj →">Read →</span>
       </a>
 
     </div>
@@ -514,73 +691,70 @@
 
   <!-- BLOG POSTS -->
   <section id="blog">
-    <p class="section-eyebrow">03 — Writing</p>
-    <h2>Selected <em>articles</em></h2>
+    <p class="section-eyebrow" data-en="03 — Writing" data-pl="03 — Artykuły">03 — Writing</p>
+    <h2 data-en="Selected <em>articles</em>" data-pl="Wybrane <em>artykuły</em>">Selected <em>articles</em></h2>
     <div class="blog-list">
 
-      <!-- ✏️ To add a post: copy one <a> block, update the href with the real URL and update the title -->
-
       <a href="https://bronowski.it/blog/2020/10/t-sql-tuesday-131-data-analogies-or-explain-databases-like-im-five-magda/" target="_blank" rel="noopener" class="blog-post">
-        <span class="post-title">Data Analogies, or Explain Databases Like I’m Five!</span>
+        <span class="post-title">Data Analogies, or Explain Databases Like I'm Five!</span>
         <span class="post-tag">SQL</span>
       </a>
 
-      <a href="https://bronowski.it/blog/2020/10/let-function-in-excel-365/ target="_blank" rel="noopener" class="blog-post">
-        <span class="post-title">LET function in EXCEL 365</span>
-        <span class="post-tag">EXCEL</span>
+      <a href="https://bronowski.it/blog/2020/10/let-function-in-excel-365/" target="_blank" rel="noopener" class="blog-post">
+        <span class="post-title">LET Function in Excel 365</span>
+        <span class="post-tag">Excel</span>
       </a>
 
-      <a href="Festive Tech Calendar 2024: Exclusive Functions in Azure SQL Database and Managed Instance" target="_blank" rel="noopener" class="blog-post">
+      <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener" class="blog-post">
         <span class="post-title">Exclusive Functions in Azure SQL Database and Managed Instance</span>
         <span class="post-tag">Azure SQL</span>
       </a>
 
-<a href="https://www.sqlservercentral.com/articles/let-your-data-do-the-talking-with-powerpoint-plus-power-bi" target="_blank" rel="noopener" class="blog-post">
+      <a href="https://www.sqlservercentral.com/articles/let-your-data-do-the-talking-with-powerpoint-plus-power-bi" target="_blank" rel="noopener" class="blog-post">
         <span class="post-title">Let Your Data Do the Talking with PowerPoint Plus Power BI</span>
         <span class="post-tag">Power BI</span>
       </a>
+
     </div>
 
-    <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener" class="blog-all-link">
-      Browse all articles →
-    </a>
+    <a href="https://bronowski.it/categories/#magda" target="_blank" rel="noopener" class="blog-all-link" data-en="Browse all articles →" data-pl="Zobacz wszystkie artykuły →">Browse all articles →</a>
   </section>
 
   <!-- HOBBIES -->
   <section id="hobbies">
-    <p class="section-eyebrow">04 — Beyond data</p>
-    <h2>Things I love <em>doing</em></h2>
-    <p class="hobby-intro">Not everything needs a pivot table. Here's what fills my time when I'm decidedly off-duty.</p>
+    <p class="section-eyebrow" data-en="04 — Beyond data" data-pl="04 — Poza danymi">04 — Beyond data</p>
+    <h2 data-en="Things I love <em>doing</em>" data-pl="To co <em>kocham</em> robić">Things I love <em>doing</em></h2>
+    <p class="hobby-intro" data-en="Not everything needs a pivot table. Here's what fills my time when I'm decidedly off-duty." data-pl="Nie wszystko wymaga tabeli przestawnej. To co wypełnia mój czas, gdy jestem zdecydowanie poza pracą.">Not everything needs a pivot table. Here's what fills my time when I'm decidedly off-duty.</p>
     <div class="hobbies-grid">
 
       <div class="hobby-card">
         <span class="hobby-emoji">🧱</span>
-        <span class="hobby-name">LEGO</span>
-        <p class="hobby-desc">There is something wonderfully meditative about building one brick at a time.</p>
+        <span class="hobby-name" data-en="LEGO" data-pl="LEGO">LEGO</span>
+        <p class="hobby-desc" data-en="There is something wonderfully meditative about building one brick at a time." data-pl="Jest coś cudownie kojącego w budowaniu klocek po klocku.">There is something wonderfully meditative about building one brick at a time.</p>
       </div>
 
       <div class="hobby-card">
         <span class="hobby-emoji">🧶</span>
-        <span class="hobby-name">Crochet</span>
-        <p class="hobby-desc">Hook and yarn — the perfect antidote to a long day.</p>
+        <span class="hobby-name" data-en="Crochet" data-pl="Szydełkowanie">Crochet</span>
+        <p class="hobby-desc" data-en="Hook and yarn - the perfect antidote to a long day." data-pl="Szydełko i włóczka - idealne antidotum na długi dzień.">Hook and yart - the perfect antidote to a long day.</p>
       </div>
 
       <div class="hobby-card">
         <span class="hobby-emoji">✈️</span>
-        <span class="hobby-name">Travels</span>
-        <p class="hobby-desc">Always plotting the next destination. New places, new food, new perspectives.</p>
+        <span class="hobby-name" data-en="Travels" data-pl="Podróże">Travels</span>
+        <p class="hobby-desc" data-en="Always plotting the next destination. New places, new food, new perspectives." data-pl="Zawsze planuję kolejny cel. Nowe miejsca, jedzenie, perspektywy.">Always plotting the next destination. New places, new food, new perspectives.</p>
       </div>
 
       <div class="hobby-card">
         <span class="hobby-emoji">🍳</span>
-        <span class="hobby-name">Cooking</span>
-        <p class="hobby-desc">Experimenting in the kitchen - basically data science with tastier outputs.</p>
+        <span class="hobby-name" data-en="Cooking" data-pl="Gotowanie">Cooking</span>
+        <p class="hobby-desc" data-en="Experimenting in the kitchen - basically data science with tastier outputs." data-pl="Eksperymenty w kuchni - jak data science, tylko smaczniejsze.">Experimenting in the kitchen — basically data science with tastier outputs.</p>
       </div>
 
       <div class="hobby-card">
         <span class="hobby-emoji">🎂</span>
-        <span class="hobby-name">Baking</span>
-        <p class="hobby-desc">Precise, patient, and deeply satisfying. Also: the results are delicious.</p>
+        <span class="hobby-name" data-en="Baking" data-pl="Pieczenie">Baking</span>
+        <p class="hobby-desc" data-en="Precise, patient, and deeply satisfying. Also: the results are delicious." data-pl="Precyzyjne, cierpliwe i satysfakcjonujące. A efekty są pyszne.">Precise, patient, and deeply satisfying. Also: the results are delicious.</p>
       </div>
 
     </div>
@@ -591,8 +765,68 @@
 <!-- FOOTER -->
 <footer>
   <span class="footer-name">Magdalena Bronowska</span>
-  <p class="footer-sub">© 2025 &nbsp;·&nbsp; <span>Made with Love and Coffee</span> &nbsp;·&nbsp; United Kingdom / Poland</p>
+  <p class="footer-sub">© 2025 &nbsp;·&nbsp; <span data-en="Made with Love and Coffee" data-pl="Zrobione z miłością i kawą">Made with Love and Coffee</span></p>
+  <p class="footer-flags">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="12" style="vertical-align:middle;border-radius:2px;margin-right:6px"><clipPath id="fa"><path d="M0 0v30h60V0z"/></clipPath><clipPath id="fb"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath><g clip-path="url(#fa)"><path d="M0 0v30h60V0z" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#fb)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></g></svg>
+    <span class="footer-flag-text">United Kingdom</span>
+    &nbsp;·&nbsp;
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="24" height="12" style="vertical-align:middle;border-radius:2px;margin-right:6px"><rect width="60" height="15" fill="#fff"/><rect y="15" width="60" height="15" fill="#DC143C"/></svg>
+    <span class="footer-flag-text">Poland</span>
+  </p>
 </footer>
+
+<script>
+// ── THEME ──
+function toggleTheme() {
+  const html = document.documentElement;
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+  document.getElementById('theme-label').textContent = isDark ? 'Light' : 'Dark';
+  localStorage.setItem('theme', isDark ? 'light' : 'dark');
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('theme-icon').textContent = '☀️';
+    document.getElementById('theme-label').textContent = 'Light';
+  }
+})();
+
+// ── LANGUAGE ──
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+
+  // Toggle active button
+  document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+  document.getElementById('btn-pl').classList.toggle('active', lang === 'pl');
+
+  // Update all elements with data-en / data-pl (except bio divs)
+  document.querySelectorAll('[data-en]').forEach(el => {
+    if (el.classList.contains('bio-en') || el.classList.contains('bio-pl')) return;
+    const val = el.getAttribute('data-' + lang);
+    if (val) el.innerHTML = val;
+  });
+
+  // Bio blocks
+  document.querySelector('.bio-en').style.display = lang === 'en' ? '' : 'none';
+  document.querySelector('.bio-pl').style.display = lang === 'pl' ? '' : 'none';
+
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+}
+
+// Restore saved language
+(function() {
+  const saved = localStorage.getItem('lang');
+  if (saved === 'pl') setLang('pl');
+})();
+</script>
 
 </body>
 </html>
